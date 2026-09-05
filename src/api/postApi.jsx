@@ -1,6 +1,6 @@
-import { create } from "axios";
+import axios from "axios";
 
-const api = create({
+const api = axios.create({
   baseURL:
     "https://v6.exchangerate-api.com/v6",
 });

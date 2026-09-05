@@ -4,11 +4,11 @@ import { useState } from "react";
 import currencies from "../api/currencies.json";
 
 export const CurrencyConverter = () => {
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState(0);
   const [fromCurr, setFromCurr] = useState("USD");
   const [exchangeCurr, setExchangeCurr] = useState("PKR");
 
-  const { data, refetch, isFetching } = useQuery({
+  const { data, refetch, isFetching , isLoading} = useQuery({
     queryKey: ["exchangeRate", fromCurr, exchangeCurr],
     queryFn: () => fetchApi(fromCurr, exchangeCurr),
     enabled: false,
@@ -75,15 +75,15 @@ export const CurrencyConverter = () => {
         </div>
 
         {/* ==================== Convert Button ==================== */}
-        <button type="button" className="convert-btn" onClick={() => refetch()}>
-          Convert
+        <button type="button" className="convert-btn" disabled={isFetching || amount <= 0} onClick={() => refetch()}>
+          {isFetching ? "Converting..." : "Convert"}
         </button>
 
         {/* ==================== Conversion Result ==================== */}
         <p className="result">
           {data ?
             `${amount} ${fromCurr} = ${(amount * data).toFixed(2)} ${exchangeCurr}` 
-        : `Press a convert button to convert your amount.`}
+        : "Enter an amount to see the conversion."}
         </p>
       </form>
     </main>
